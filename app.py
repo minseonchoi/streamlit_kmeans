@@ -20,7 +20,7 @@ def main() :
     if file is not None :
         
         # 1-1. 판다스의 데이터프레임으로 읽는다.
-        df = pd.read_csv(file)
+        df = pd.read_csv(file, index_col=1)
 
         # 1-2. 10개 미만의 파일을 올리면, 에러 처리하자
         if df.shape[0] < 10 :
@@ -94,28 +94,43 @@ def main() :
             st.dataframe(X_new)
 
             # 5. K의 갯수를 1개부터 10개까지 해서 wcss를 구한다.
-
-
-
+            wcss = []
+            for k in np.arange(1, 10+1) :
+                kmeans = KMeans(n_clusters=k, random_state=5)
+                kmeans.fit(X_new)
+                wcss.append(kmeans.inertia_)
+                
             # 6. elobw method 를 이용해서. 차트로 보여준다.
+            fig1 = plt.figure()
+            x = np.arange(1, 10+1)
+            plt.plot(x, wcss)
+            plt.title('The Elbow Method')
+            plt.xlabel('Number of Clusters')
+            plt.ylabel('WCSS')
+            st.pyplot(fig1)
 
             # 7. 유저가 k의 갯수를 정한다.
+            k = st.slider('클러스터 갯수 설정', min_value=1, max_value=10)
 
             # 8. KMeans 수행해서 그룹정보를 가져온다.
+            kmeans = KMeans(n_clusters= k, random_state= 5)
+            y_pred = kmeans.fit_predict(X_new)
             
             # 9. 원래 있던 df 에 Group 이라는컬럼을 만들어준다.
+            df['Group'] = y_pred
 
             # 10. 결과를 파일로 저장한다.
-        
-        elif len(selected_columns) < 2 : 
-            st.write()
+            df.to_csv('result.csv')
 
+            # 11. 유저한테 보여준다.
+            st.subheader('클러스터링 결과')
 
+            st.dataframe(df)
 
+            # 12. 유저가 그룹을 선택하면, 해당 그룹의 정보를 보여준다.
+            choice = st.selectbox('그룹을 선택하세요', np.arange(0, k))
 
-
-
-
+            st.dataframe(df.loc[ df['Group'] == choice , ])
 
 
 
