@@ -53,7 +53,10 @@ def main() :
 
         X = df[ selected_columns ]
 
-        st.dataframe( X )
+        if selected_columns == [] :
+            pass
+        else :
+            st.dataframe( X )
 
         # 밑에 있는 것을 하려면 유저가 2개 이상 선택을 해야한다
         if len(selected_columns) >= 2 : 
@@ -132,7 +135,10 @@ def main() :
 
             st.dataframe(df.loc[ df['Group'] == choice , ])
 
-
+        elif len(selected_columns) <= 1 :
+            st.write('컬럼을 2개 이상 선택해 주세요.')
+    else : 
+        pass
 
 if __name__ == '__main__' :
     main()
