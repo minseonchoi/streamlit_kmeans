@@ -1,13 +1,18 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-
 from sklearn.cluster import KMeans
 
+# 리눅스 한글 폰트 설정
+import platform
 import matplotlib.pyplot as plt
-import numpy as np
+from matplotlib import font_manager, rc
+plt.rcParams['axes.unicode_minus'] = False
+if platform.system() == 'Linux':
+    rc('font', family='NanumGothic')
 
 
 def main() :
@@ -107,8 +112,8 @@ def main() :
             fig1 = plt.figure()
             x = np.arange(1, 10+1)
             plt.plot(x, wcss)
-            plt.title('The Elbow Method')
-            plt.xlabel('Number of Clusters')
+            plt.title('엘보우 메소드')
+            plt.xlabel('클러스터의 갯수')
             plt.ylabel('WCSS')
             st.pyplot(fig1)
 
