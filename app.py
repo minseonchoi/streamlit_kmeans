@@ -16,10 +16,11 @@ if platform.system() == 'Linux':
 
 
 def main() :
-    st.title('K-Means 클러스터링 앱')
-    st.text('CSV 파일을 업로드하면, 비슷한 유형의 데이터끼리 묶어주는 앱입니다')
+    st.write('### K-Means 클러스터링 앱')
+    st.write("#### CSV 파일을 업로드하면, 비슷한 유형의 데이터끼리 묶어줍니다.")
 
     # 1. csv 파일 업로드
+    st.write('##### ✏️ 클러스터링이 필요한 파일을 업로드 합니다.')
     file = st.file_uploader('csv파일 업로드', type=['csv'])
 
     if file is not None :
@@ -33,12 +34,17 @@ def main() :
             return
 
         # 1-3. 유저한테 데이터프레임 보여준다.
-        st.dataframe(df)
+        else :
+            st.write('업로드 파일')
+            st.dataframe(df)
         
         # 2. nan 데이터 있으면, 삭제하자.
         print( df.isna().sum() )
 
-        st.subheader('각 컬럼별 Nan의 갯수 입니다.')
+        st.write('')
+        st.write('')
+
+        st.write('##### ✏️ 각 항목별 비어있는 데이터의 갯수 입니다.')
 
         st.dataframe( df.isna().sum() )
 
@@ -47,12 +53,15 @@ def main() :
         # dropna 하면 reset_index 를 해줘야 한다
         df.reset_index(inplace=True)
 
-        st.info('Nan 이 있으면 해당 데이터는 삭제합니다.')
+        st.info('비어있는 데이터가 있으면 해당 데이터는 삭제합니다.')
 
         # 3. 유저한테 컬럼을 선택 할 수 있도록 하자.
         print( df.columns )
 
-        st.subheader('클러스터링에 사용 할 컬럼을 선택합니다.')
+        st.write('')
+        st.write('')
+
+        st.write('##### ✏️ 클러스터링에 사용 할 항목을 선택합니다.')
 
         selected_columns = st.multiselect('X로 사용 할 컬럼을 선택하세요.', df.columns)
 
@@ -98,7 +107,8 @@ def main() :
 
             X_new.reset_index(inplace=True, drop=True)
 
-            st.subheader('클러스터링에 실제 사용 할 데이터')
+            st.write('### ⬇︎⬇︎⬇︎')
+            st.write('###### 원하는 항목의 데이터를 가공하여 클러스터링에 실제 사용 할 데이터입니다.')
             st.dataframe(X_new)
 
             # 5. K의 갯수를 1개부터 10개까지 해서 wcss를 구한다.
@@ -108,6 +118,14 @@ def main() :
                 kmeans.fit(X_new)
                 wcss.append(kmeans.inertia_)
                 
+            st.write('')
+            st.write('')
+
+            st.write('''
+                     ##### ✏️ wcss를 구해서, 
+                     ##### 1개부터 10개까지의 그룹으로 나누어 엘보우메소드 차트로 보여드렸습니다.
+                     ''')    
+
             # 6. elobw method 를 이용해서. 차트로 보여준다.
             fig1 = plt.figure()
             x = np.arange(1, 10+1)
@@ -117,8 +135,20 @@ def main() :
             plt.ylabel('WCSS')
             st.pyplot(fig1)
 
+            st.write('''
+                     #####  ✏️ 차트를 유의해서 봐야 하는 부분
+                     > 엘보우 포인트 : 특정 지점에서 WCSS 값의 감소 폭이 줄어들게 되는 지점입니다. \n
+                     > 이 지점 이후로는 WCSS 값의 감소 폭이 크지 않아 클러스터의 개수를 더 늘리는 것이
+                     효과적이지 않다고 판단할 수 있습니다.  \n
+                     > 하여, 엘보우 포인트 지점이 최적의 클러스터 개수로 간주됩니다.   
+                        ''')
+                
+            st.write('')
+            st.write('')
+
             # 7. 유저가 k의 갯수를 정한다.
-            k = st.slider('클러스터 갯수 설정', min_value=1, max_value=10)
+            st.write('#####  ✏️ 클러스터의 개수는 몇 개로 설정하시겠습니까?')
+            k = st.slider('차트를 보고 몇개의 그룹으로 나눌 것인지 설정하세요.', min_value=1, max_value=10)
 
             # 8. KMeans 수행해서 그룹정보를 가져온다.
             kmeans = KMeans(n_clusters= k, random_state= 5)
@@ -130,15 +160,38 @@ def main() :
             # 10. 결과를 파일로 저장한다.
             df.to_csv('result.csv')
 
+            st.write('')
+            st.write('')
+
             # 11. 유저한테 보여준다.
-            st.subheader('클러스터링 결과')
+            st.write('##### ✏️ 클러스터링 결과 데이터 입니다.')
 
             st.dataframe(df)
 
+            st.write('###### 크러스터링된 전체 데이터를 저장 할 수 있습니다.')
+            # 파일 다운로드 버튼 만들기
+            if st.download_button(
+                label="클러스터링 데이터 다운로드 버튼",
+                data=df.to_csv(index=False),
+                file_name='clusters.csv',
+                mime='text/csv'):
+                st.success('✔️ 파일이 다운로드 되었습니다!')
+
             # 12. 유저가 그룹을 선택하면, 해당 그룹의 정보를 보여준다.
+            st.write('##### ✏️ 원하는 그룹을 선택하시면 해당 그룹만 출력됩니다.')
             choice = st.selectbox('그룹을 선택하세요', np.arange(0, k))
 
             st.dataframe(df.loc[ df['Group'] == choice , ])
+
+            # 유저가 분리된 그룹으로 된 파일로 다운 받을 수 있게 만든다.
+            st.write('###### 원하는 그룹의 데이터만 저장할 수 있습니다.')
+            df_choice= df.loc[ df['Group'] == choice , ]
+            if st.download_button(
+                label="그룹별 클러스터링 데이터 다운로드 버튼",
+                data=df_choice.to_csv(index=False),
+                file_name='clusters_group.csv',
+                mime='text/csv'):
+                st.success('✔️ 파일이 다운로드 되었습니다!')
 
         elif len(selected_columns) <= 1 :
             st.write('컬럼을 2개 이상 선택해 주세요.')
