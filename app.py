@@ -183,9 +183,14 @@ def main() :
 
             st.dataframe(df.loc[ df['Group'] == choice , ])
 
+            # 그룹별 통계치를 보여주자
+            st.write('###### 선택한 그룹의 통계치를 확인하고 싶으면 체크박스의 내용을 확인하세요.')
+            if st.checkbox('그룹 별 통계치'):
+                st.dataframe(df.loc[ df['Group'] == choice , ].describe())
+
             # 유저가 분리된 그룹으로 된 파일로 다운 받을 수 있게 만든다.
             st.write('###### 원하는 그룹의 데이터만 저장할 수 있습니다.')
-            df_choice= df.loc[ df['Group'] == choice , ]
+            df_choice= df.loc[ df['Group'] == choice , ].reset_index()
             if st.download_button(
                 label="그룹별 클러스터링 데이터 다운로드 버튼",
                 data=df_choice.to_csv(index=False),
