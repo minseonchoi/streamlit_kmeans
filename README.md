@@ -4,7 +4,7 @@
 
 #### 비슷한 항목끼리 묶어서 그룹으로 지정할 수 있어, 그룹 별 특징에 따라서 여러 방면으로 활용할 수 있습니다.
 
-[K-Means 클러스터링 앱 URL](http://ec2-43-203-208-63.ap-northeast-2.compute.amazonaws.com:8504/)
+[K-Means 클러스터링 앱 URL](http://ec2-43-200-173-72.ap-northeast-2.compute.amazonaws.com:8503/)
 
 
 ✏️ 작업순서
