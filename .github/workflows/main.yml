@@ -9,7 +9,6 @@ on:
 
 
 jobs:
- # github에서 리녹스 컴퓨터 하나 만들어서 접속하라는 명령어
   SSH:
     runs-on: ubuntu-latest
 
