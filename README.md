@@ -62,7 +62,9 @@
 AWS EC2에 리눅스 프리 티어를 사용해서 배포했습니다.
 - Git 설치 과정과 AWS 배포 과정 블로그 정리했습니다.
 - [minseonchoi의 블로그 AWS 카테고리](https://msdev-st.tistory.com/category/AWS)
+  
 github Actions로 EC2 리눅스에 git pull 자동화했습니다.
+
 현재 사용하고 있는 사용자도 새로운 버전의 화면을 볼 수 있도록 서버 실행 명령어에 --server.runOnSave true를 추가했습니다.
 
 
