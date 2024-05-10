@@ -163,8 +163,9 @@ def run_home() :
             # 9. 원래 있던 df 에 Group 이라는컬럼을 만들어준다.
             df['Group'] = y_pred
 
-            # 10. 결과를 파일로 저장한다.
-            df.to_csv('result.csv')
+            # 저장 안함.
+            ## 10. 결과를 파일로 저장한다.
+            ## df.to_csv('result.csv')
 
             st.write('')
             st.write('')
