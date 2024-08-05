@@ -6,13 +6,23 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.cluster import KMeans
 
-# 리눅스 한글 폰트 설정
-import platform
-import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
-plt.rcParams['axes.unicode_minus'] = False
-if platform.system() == 'Linux':
-    rc('font', family='NanumGothic')
+import os
+import shutil
+
+
+# 나눔 폰트 경로 설정
+font_path = '/usr/share/fonts/nanum/NanumGothic.ttf'
+font_prop = font_manager.FontProperties(fname=font_path)
+
+# 폰트를 matplotlib에 등록
+font_manager.fontManager.addfont(font_path)
+rc('font', family=font_prop.get_name())
+
+# Matplotlib 캐시 삭제
+cache_dir = os.path.expanduser('~/.cache/matplotlib')
+if os.path.exists(cache_dir):
+    shutil.rmtree(cache_dir)
 
 
 def run_home() :
